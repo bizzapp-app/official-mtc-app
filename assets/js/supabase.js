@@ -10,15 +10,17 @@ import { getSupabaseCredentials } from './config.js';
 
 const { url, anonKey } = getSupabaseCredentials();
 
-// Only instantiate the real client if valid URL and Key exist
-export const supabase = (url && anonKey) 
-  ? createClient(url, anonKey, {
-      auth: {
-        persistSession: true,
-        autoRefreshToken: true,
-        detectSessionInUrl: true
-      }
-    })
+export const supabase = createClient(
+  url || 'https://ltghhactycmfovbrahyd.supabase.co',
+  anonKey || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx0Z2hoYWN0eWNtZm92YnJhaHlkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkxMjI4MjQsImV4cCI6MjEwNDY5ODgyNH0.XmVLLTVhlqv86g1TeACfqXMlHn3XFJYjjPqhWkorX2g',
+  {
+    auth: {
+      persistSession: true,
+      autoRefreshToken: true,
+      detectSessionInUrl: true
+    }
+  }
+);
   : createClient('https://xyz.supabase.co', 'dummy-key-to-prevent-crash', {
       auth: { persistSession: false }
     });
