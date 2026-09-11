@@ -5,18 +5,23 @@
 import { createClient } from '@supabase/supabase-js';
 import { getSupabaseCredentials } from './config.js';
 
+import { createClient } from '@supabase/supabase-js';
+import { getSupabaseCredentials } from './config.js';
+
 const { url, anonKey } = getSupabaseCredentials();
 
-export const supabase = createClient(
-  url || 'https://invalid.local',
-  anonKey || 'invalid',
-  {
-    auth: {
-      persistSession: true,
-      autoRefreshToken: true,
-      detectSessionInUrl: true
-    }
-  }
+// Only instantiate the real client if valid URL and Key exist
+export const supabase = (url && anonKey) 
+  ? createClient(url, anonKey, {
+      auth: {
+        persistSession: true,
+        autoRefreshToken: true,
+        detectSessionInUrl: true
+      }
+    })
+  : createClient('https://xyz.supabase.co', 'dummy-key-to-prevent-crash', {
+      auth: { persistSession: false }
+    });
 );
 
 function assertOk(error, context) {
