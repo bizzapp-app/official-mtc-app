@@ -68,41 +68,61 @@
   </div>
 
   <script type="module">
-    import { authenticateUser, getCurrentUser } from './assets/js/auth.js';
+  import { authenticateUser, getCurrentUser } from './assets/js/auth.js';
 
-    // If already signed in, go to dashboard
-    const existing = await getCurrentUser();
-    if (existing) {
+  const form = document.getElementById('login-form');
+  const errEl = document.getElementById('login-error');
+  const btn = document.getElementById('login-submit');
+
+  const themeBtn = document.getElementById('login-theme-btn');
+
+  themeBtn?.addEventListener('click', async () => {
+    const m = await import('./assets/js/theme.js');
+    m.toggleTheme();
+    themeBtn.textContent =
+      m.getTheme() === 'dark' ? '☀️ Theme' : '🌙 Theme';
+  });
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    errEl.style.display = 'none';
+    btn.disabled = true;
+    btn.textContent = 'Signing in…';
+
+    try {
+      await authenticateUser(
+        document.getElementById('login-email').value,
+        document.getElementById('login-password').value
+      );
+
       const params = new URLSearchParams(window.location.search);
-      window.location.href = params.get('redirect') || 'dashboard.html';
+      window.location.href =
+        params.get('redirect') || 'dashboard.html';
+
+    } catch (err) {
+      errEl.textContent = err.message || 'Login failed';
+      errEl.style.display = 'block';
+      btn.disabled = false;
+      btn.textContent = 'Sign in';
     }
+  });
 
-    const form = document.getElementById('login-form');
-    const errEl = document.getElementById('login-error');
-    const btn = document.getElementById('login-submit');
+  // If already signed in, go to dashboard.
+  // Wrapped in an async function so there is no top-level await.
+  (async () => {
+    try {
+      const existing = await getCurrentUser();
 
-    const themeBtn = document.getElementById('login-theme-btn');
-    themeBtn?.addEventListener('click', async () => { const m = await import('./assets/js/theme.js'); m.toggleTheme(); themeBtn.textContent = m.getTheme() === 'dark' ? '☀️ Theme' : '🌙 Theme'; });
-
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      errEl.style.display = 'none';
-      btn.disabled = true;
-      btn.textContent = 'Signing in…';
-      try {
-        await authenticateUser(
-          document.getElementById('login-email').value,
-          document.getElementById('login-password').value
-        );
+      if (existing) {
         const params = new URLSearchParams(window.location.search);
-        window.location.href = params.get('redirect') || 'dashboard.html';
-      } catch (err) {
-        errEl.textContent = err.message || 'Login failed';
-        errEl.style.display = 'block';
-        btn.disabled = false;
-        btn.textContent = 'Sign in';
+        window.location.href =
+          params.get('redirect') || 'dashboard.html';
       }
-    });
-  </script>
+    } catch (err) {
+      console.error('Session check failed:', err);
+    }
+  })();
+</script>
 </body>
 </html>
