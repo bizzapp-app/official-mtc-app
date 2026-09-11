@@ -44,13 +44,11 @@ export const CONFIG = {
  * Service role must NEVER appear here.
  */
 export function getSupabaseCredentials() {
-  const url = (import.meta.env?.VITE_SUPABASE_URL || "").trim();
-  const anonKey = (import.meta.env?.VITE_SUPABASE_ANON_KEY || "").trim();
+  const url = import.meta.env.VITE_SUPABASE_URL;
+  const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
   if (!url || !anonKey) {
-    console.error(
-      "[config] Missing VITE_SUPABASE_URL or VITE_SUPABASE_ANON_KEY. Configure environment variables."
-    );
+    console.warn('[config] Missing VITE_SUPABASE_URL or VITE_SUPABASE_ANON_KEY. Configure environment variables.');
   }
 
   return { url, anonKey };
