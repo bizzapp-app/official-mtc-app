@@ -38,20 +38,19 @@ export const CONFIG = {
 
 /**
  * Supabase browser credentials.
- * Set in .env / Vercel:
- *   VITE_SUPABASE_URL=https://ltghhactycmfovbrahyd.supabase.co
- *   VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx0Z2hoYWN0eWNtZm92YnJhaHlkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkxMjI4MjQsImV4cCI6MjEwNDY5ODgyNH0.XmVLLTVhlqv86g1TeACfqXMlHn3XFJYjjPqhWkorX2g
- * Service role must NEVER appear here.
  */
 export function getSupabaseCredentials() {
   const url = import.meta.env.VITE_SUPABASE_URL;
   const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
   if (!url || !anonKey) {
-    console.warn('[config] Missing VITE_SUPABASE_URL or VITE_SUPABASE_ANON_KEY. Configure environment variables.');
+    console.error('[config] Missing VITE_SUPABASE_URL or VITE_SUPABASE_ANON_KEY. Configure environment variables in Vercel.');
   }
 
-  return { url, anonKey };
+  return { 
+    url: url || '', 
+    anonKey: anonKey || '' 
+  };
 }
 
 export function getSchoolInfo() {
