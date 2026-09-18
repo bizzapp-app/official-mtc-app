@@ -12,12 +12,16 @@ export const CONFIG = {
   LOCATION: "Mercylite Medical Complex, Kiambu Road, Kenya",
   WEBSITE: "https://yobra-jpg.github.io/mercylife-training-college/",
 
-  /** localStorage key *names* only — never store secrets here */
+  AUTH_INTERNAL_DOMAIN: "portal.mercylife.local",
+
   STORAGE_KEYS: {
     CURRENT_USER_CACHE: "mercylife_current_user_cache",
     THEME_MODE: "mercylife_theme_mode",
     SCHOOL_INFO: "mercylife_school_info"
   },
+
+  // ...
+};
 
   // Username-only accounts are represented in Supabase Auth using this
   // internal email domain. Users still log in with username + password.
